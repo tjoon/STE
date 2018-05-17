@@ -20,6 +20,7 @@ import comtjoon.github.ste.network.NetworkUtil
 import comtjoon.github.ste.utils.Constants
 import comtjoon.github.ste.utils.Validation
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.view.*
 import retrofit2.adapter.rxjava.HttpException
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -44,19 +45,20 @@ class LoginFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(fragment_login, container, false)
         mSubscriptions = CompositeSubscription()
+
         initViews(view)
         initSharedPreferences()
         return view
     }
 
     private fun initViews(v: View) {
-        btn_login?.setOnClickListener {
+        v.btn_login.setOnClickListener {
             login()
         }
-        tv_register?.setOnClickListener{
+        v.tv_register.setOnClickListener{
             goToRegister()
         }
-        tv_forgot_password?.setOnClickListener{
+        v.tv_forgot_password.setOnClickListener{
             showDialog()
         }
 
@@ -87,6 +89,10 @@ class LoginFragment : Fragment() {
 
 
         if (err == 0) {
+            loginProcess(email,password);
+            progress.visibility = View.VISIBLE;
+        } else{
+            showSnackBarMessage("Enter Valid Details !");
         }
 
     }

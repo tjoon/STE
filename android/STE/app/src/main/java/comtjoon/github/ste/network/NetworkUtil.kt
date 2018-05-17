@@ -9,12 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import rx.schedulers.Schedulers
 
 
-
-
-
-
-
-class NetworkUtil{
+class NetworkUtil {
     companion object {
         fun getRetrofit(): RetrofitInterface {
 
