@@ -1,7 +1,6 @@
 package comtjoon.github.ste.model
 
 
-
 class User {
 
     private var name: String? = null

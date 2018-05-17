@@ -4,7 +4,7 @@ import android.text.TextUtils
 import android.util.Patterns
 
 
-class Validation{
+class Validation {
     companion object {
         fun validateFields(name: String): Boolean {
 
