@@ -21,11 +21,15 @@ import rx.subscriptions.CompositeSubscription
 import java.io.IOException
 
 
-class ChangePasswordDialog : DialogFragment(){
+open class ChangePasswordDialog : DialogFragment(){
 
     interface Listener {
 
         fun onPasswordChanged()
+    }
+
+    companion object {
+        val TAG = ChangePasswordDialog::class.java.simpleName
     }
 
     private var mSubscriptions: CompositeSubscription? = null
