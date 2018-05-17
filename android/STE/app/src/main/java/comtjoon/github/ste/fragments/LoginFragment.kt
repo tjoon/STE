@@ -30,7 +30,11 @@ import java.io.IOException
 
 class LoginFragment : Fragment() {
 
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> testbranch
     companion object {
         val TAG = LoginFragment::class.java.simpleName
     }
