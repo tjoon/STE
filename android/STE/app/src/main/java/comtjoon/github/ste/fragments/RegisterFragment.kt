@@ -1,28 +1,27 @@
 package comtjoon.github.ste.fragments
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import com.google.gson.GsonBuilder
 import comtjoon.github.ste.R
 import comtjoon.github.ste.model.Response
-import kotlinx.android.synthetic.main.fragment_register.*
-import rx.subscriptions.CompositeSubscription
 import comtjoon.github.ste.model.User
+import comtjoon.github.ste.network.NetworkUtil
 import comtjoon.github.ste.utils.Validation.Companion.validateEmail
 import comtjoon.github.ste.utils.Validation.Companion.validateFields
-import rx.schedulers.Schedulers
-import rx.android.schedulers.AndroidSchedulers
-import comtjoon.github.ste.network.NetworkUtil
-import android.support.design.widget.Snackbar
+import kotlinx.android.synthetic.main.fragment_register.*
 import retrofit2.adapter.rxjava.HttpException
-import com.google.gson.GsonBuilder
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import rx.subscriptions.CompositeSubscription
 import java.io.IOException
 
 
-class RegisterFragment : Fragment(){
+class RegisterFragment : Fragment() {
     companion object {
         val TAG = RegisterFragment::class.java.simpleName
     }
@@ -35,12 +34,12 @@ class RegisterFragment : Fragment(){
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    private fun initView(v : View){
-        btn_register.setOnClickListener {
-            v -> register()
+    private fun initView(v: View) {
+        btn_register.setOnClickListener { v ->
+            register()
         }
-        tv_login.setOnClickListener {
-            v -> goToLogin()
+        tv_login.setOnClickListener { v ->
+            goToLogin()
         }
     }
 
@@ -101,7 +100,7 @@ class RegisterFragment : Fragment(){
         mSubscriptions!!.add(NetworkUtil.getRetrofit().register(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private fun handleResponse(response: Response) {

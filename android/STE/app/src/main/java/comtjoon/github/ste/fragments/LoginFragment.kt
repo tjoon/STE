@@ -28,9 +28,6 @@ import rx.subscriptions.CompositeSubscription
 import java.io.IOException
 
 
-
-
-
 class LoginFragment : Fragment() {
 
     companion object {
@@ -55,10 +52,10 @@ class LoginFragment : Fragment() {
         v.btn_login.setOnClickListener {
             login()
         }
-        v.tv_register.setOnClickListener{
+        v.tv_register.setOnClickListener {
             goToRegister()
         }
-        v.tv_forgot_password.setOnClickListener{
+        v.tv_forgot_password.setOnClickListener {
             showDialog()
         }
 
@@ -89,9 +86,9 @@ class LoginFragment : Fragment() {
 
 
         if (err == 0) {
-            loginProcess(email,password);
+            loginProcess(email, password);
             progress.visibility = View.VISIBLE;
-        } else{
+        } else {
             showSnackBarMessage("Enter Valid Details !");
         }
 
