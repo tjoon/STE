@@ -3,31 +3,34 @@
 const user = require('../models/user');
 const bcrypt = require('bcryptjs');
 
-exports.registerUser = (name, email, password) =>
-    
-    new Promise((resolve, reject) => {
+exports.registerUser = (name, email, password) => 
 
-        const salt = bcrypt.getSaltSync(10);
-        const hash = bcrypt.hashSync(password, salt);
+	new Promise((resolve,reject) => {
 
-        const newUser = new user({
-            name: name,
-            email: email,
-            hashed_password: hash,
-            created_at: new Date()
-        });
+	    const salt = bcrypt.genSaltSync(10);
+		const hash = bcrypt.hashSync(password, salt);
 
-        newUser.save()
+		const newUser = new user({
 
-        .then(() => resolve({ status: 201, message: 'User Registered Sucessfully !'}))
+			name: name,
+			email: email,
+			hashed_password: hash,
+			created_at: new Date()
+		});
 
-        .catch(err => {
+		newUser.save()
 
-            if(err.code == 11000){
-                
-                reject({ status: 409, message: 'User Already Registered !'});
-            } else{
-                reject({ status: 500, message: 'Internal Server Error !'});
-            }
-        });
-    });
+		.then(() => resolve({ status: 201, message: 'User Registered Sucessfully !' }))
+
+		.catch(err => {
+
+			if (err.code == 11000) {
+
+				reject({ status: 409, message: 'User Already Registered !' });
+
+			} else {
+
+				reject({ status: 500, message: 'Internal Server Error !' });
+			}
+		});
+	});

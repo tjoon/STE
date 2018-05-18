@@ -24,7 +24,7 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
 
 
     companion object {
-        var TAG = ProfileActivity::class.java.simpleName
+        val TAG = ProfileActivity::class.java.simpleName
     }
 
     private var mSubscriptions: CompositeSubscription? = null
@@ -73,7 +73,7 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
         var bundle = Bundle()
         bundle.putString(Constants.EMAIL, mEmail)
         bundle.putString(Constants.TOKEN, mToken)
-        fragment.setArguments(bundle)
+        fragment.arguments = bundle
 
         fragment.show(supportFragmentManager, ChangePasswordDialog.TAG)
     }
@@ -83,24 +83,24 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
         mSubscriptions!!.add(NetworkUtil.getRetrofit(mToken!!).getProfile(mEmail!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponse, this::handleError))
     }
 
     private fun handleResponse(user: User) {
 
         progress.visibility = View.GONE
-        tv_name.setText(user.getName())
-        tv_email.setText(user.getEmail())
-        tv_date.setText(user.getCreated_at())
+        tv_name.text = user.getName()
+        tv_email.text = user.getEmail()
+        tv_date.text = user.getCreated_at()
     }
 
     private fun handleError(error: Throwable) {
 
-        progress.setVisibility(View.GONE)
+        progress.visibility = View.GONE
 
         if (error is HttpException) {
 
-            val gson = GsonBuilder().create()
+            var gson = GsonBuilder().create()
 
             try {
 

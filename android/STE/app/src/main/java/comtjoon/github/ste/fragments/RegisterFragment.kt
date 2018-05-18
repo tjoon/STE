@@ -14,6 +14,7 @@ import comtjoon.github.ste.network.NetworkUtil
 import comtjoon.github.ste.utils.Validation.Companion.validateEmail
 import comtjoon.github.ste.utils.Validation.Companion.validateFields
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.fragment_register.view.*
 import retrofit2.adapter.rxjava.HttpException
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -30,15 +31,15 @@ class RegisterFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_register, container, false)
         mSubscriptions = CompositeSubscription()
-
-        return super.onCreateView(inflater, container, savedInstanceState)
+        initViews(view);
+        return view
     }
 
-    private fun initView(v: View) {
-        btn_register.setOnClickListener { v ->
+    private fun initViews(v: View) {
+        v.btn_register.setOnClickListener {
             register()
         }
-        tv_login.setOnClickListener { v ->
+        v.tv_login.setOnClickListener {
             goToLogin()
         }
     }
@@ -48,28 +49,28 @@ class RegisterFragment : Fragment() {
 
         setError()
 
-        val name = et_name.getText().toString()
-        val email = et_email.getText().toString()
-        val password = et_password.getText().toString()
+        var name = et_name.getText().toString()
+        var email = et_email.getText().toString()
+        var password = et_password.getText().toString()
 
         var err = 0
 
         if (!validateFields(name)) {
 
             err++
-            ti_name.setError("Name should not be empty !")
+            ti_name.error = "Name should not be empty !"
         }
 
         if (!validateEmail(email)) {
 
             err++
-            ti_email.setError("Email should be valid !")
+            ti_email.error = "Email should be valid !"
         }
 
         if (!validateFields(password)) {
 
             err++
-            ti_password.setError("Password should not be empty !")
+            ti_password.error = "Password should not be empty !"
         }
 
         if (err == 0) {
@@ -79,7 +80,7 @@ class RegisterFragment : Fragment() {
             user.setEmail(email)
             user.setPassword(password)
 
-            progress.setVisibility(View.VISIBLE)
+            progress.visibility = View.VISIBLE
             registerProcess(user)
 
         } else {
@@ -100,11 +101,10 @@ class RegisterFragment : Fragment() {
         mSubscriptions!!.add(NetworkUtil.getRetrofit().register(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponse, this::handleError))
     }
 
     private fun handleResponse(response: Response) {
-
         progress.setVisibility(View.GONE)
         showSnackBarMessage(response.getMessage()!!)
     }
@@ -123,12 +123,12 @@ class RegisterFragment : Fragment() {
 
         if (error is HttpException) {
 
-            val gson = GsonBuilder().create()
+            var gson = GsonBuilder().create()
 
             try {
 
-                val errorBody = error.response().errorBody().string()
-                val response = gson.fromJson(errorBody, Response::class.java)
+                var errorBody = error.response().errorBody().string()
+                var response = gson.fromJson(errorBody, Response::class.java)
                 showSnackBarMessage(response.getMessage()!!)
 
             } catch (e: IOException) {
@@ -147,6 +147,11 @@ class RegisterFragment : Fragment() {
         var fragment = LoginFragment()
         ft.replace(R.id.fragmentFrame, fragment, LoginFragment.TAG)
         ft.commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mSubscriptions!!.unsubscribe()
     }
 
 }

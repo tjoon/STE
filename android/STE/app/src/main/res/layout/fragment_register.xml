@@ -33,7 +33,7 @@
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/ic_person"
+                    android:drawableRight="@drawable/ic_person_1"
                     android:hint="Name"
                     android:inputType="text" />
 
@@ -50,7 +50,7 @@
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/ic_email"
+                    android:drawableRight="@drawable/ic_email_1"
                     android:hint="Email"
                     android:inputType="textEmailAddress" />
 

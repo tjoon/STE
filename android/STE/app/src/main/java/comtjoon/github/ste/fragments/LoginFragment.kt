@@ -81,7 +81,7 @@ class LoginFragment : Fragment() {
 
         if (!Validation.validateFields(password)) {
             err++
-            ti_password.setError("Password should not be empty !")
+            ti_password.error = "Password should not be empty !"
         }
 
 
@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
         mSubscriptions!!.add(NetworkUtil.getRetrofit(email, password).login()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponse, this::handleError))
     }
 
     private fun handleResponse(response: Response) {
@@ -115,10 +115,10 @@ class LoginFragment : Fragment() {
         editor.putString(Constants.EMAIL, response.getMessage())
         editor.apply()
 
-        et_email.setText(null)
-        et_password.setText(null)
+        et_email.text = null
+        et_password.text = null
 
-        val intent = Intent(activity, ProfileActivity::class.java)
+        var intent = Intent(activity, ProfileActivity::class.java)
         startActivity(intent)
 
     }
