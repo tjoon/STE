@@ -16,6 +16,7 @@ import comtjoon.github.ste.network.NetworkUtil
 import comtjoon.github.ste.utils.Validation.Companion.validateEmail
 import comtjoon.github.ste.utils.Validation.Companion.validateFields
 import kotlinx.android.synthetic.main.dialog_reset_password.*
+import kotlinx.android.synthetic.main.dialog_reset_password.view.*
 import retrofit2.adapter.rxjava.HttpException
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -55,10 +56,10 @@ open class ResetPasswordDialog : DialogFragment() {
 
     private fun setEmptyFields() {
 
-        ti_email.setError(null)
-        ti_token.setError(null)
-        ti_password.setError(null)
-        tv_message.setText(null)
+        ti_email.error = null
+        ti_token.error = null
+        ti_password.error = null
+        tv_message.text = null
     }
 
     fun setToken(token: String) {
@@ -67,7 +68,7 @@ open class ResetPasswordDialog : DialogFragment() {
     }
 
     private fun initViews(v: View) {
-        btn_reset_password.setOnClickListener {
+        v.btn_reset_password.setOnClickListener {
             if (isInit)
                 resetPasswordInit()
             else

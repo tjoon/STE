@@ -27,7 +27,9 @@ class NetworkUtil {
         fun getRetrofit(email: String, password: String): RetrofitInterface {
 
             var credentials = "$email:$password"
+            println(credentials)
             var basic = "Basic " + Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)
+            println(basic)
             var httpClient = OkHttpClient.Builder()
 
             httpClient.addInterceptor { chain ->
@@ -39,8 +41,16 @@ class NetworkUtil {
                 chain.proceed(builder.build())
 
             }
+            println("###" + httpClient)
 
             var rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io())
+
+            println("###"+Retrofit.Builder()
+                    .baseUrl(Constants.BASE_URL)
+                    .client(httpClient.build())
+                    .addCallAdapterFactory(rxAdapter)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build().create(RetrofitInterface::class.java))
 
             return Retrofit.Builder()
                     .baseUrl(Constants.BASE_URL)

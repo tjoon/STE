@@ -11,7 +11,7 @@ const config = require('./config/config.json');
 
 module.exports = router => {
 
-    router.get('/', (req, res) => res.end('Welcome to Learn2Crack !'));
+    router.get('/', (req, res) => res.end('Welcome to tjoon !'));
 
 	router.post('/authenticate', (req, res) => {
 
@@ -19,7 +19,7 @@ module.exports = router => {
 
 		if (!credentials) {
 
-			res.status(400).json({ message: 'Invalid Request !' });
+			res.status(400).json({ message: 'Invalid Request ! /authenticate' });
 
 		} else {
 
