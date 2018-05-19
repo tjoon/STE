@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.gson.GsonBuilder
+import comtjoon.github.ste.ProfileActivity
 import comtjoon.github.ste.R
 import comtjoon.github.ste.model.Response
 import comtjoon.github.ste.model.User
@@ -14,11 +15,14 @@ import comtjoon.github.ste.network.NetworkUtil
 import comtjoon.github.ste.utils.Constants
 import comtjoon.github.ste.utils.Validation.Companion.validateFields
 import kotlinx.android.synthetic.main.dialog_change_password.*
+import kotlinx.android.synthetic.main.dialog_change_password.view.*
 import retrofit2.adapter.rxjava.HttpException
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 import java.io.IOException
+
+
 
 
 open class ChangePasswordDialog : DialogFragment(){
@@ -45,10 +49,6 @@ open class ChangePasswordDialog : DialogFragment(){
         return view
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-    }
 
     private fun getData() {
 
@@ -58,11 +58,16 @@ open class ChangePasswordDialog : DialogFragment(){
         mEmail = bundle.getString(Constants.EMAIL)
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mListener = context as ProfileActivity
+    }
+
     private fun initViews(v: View) {
-        btn_change_password.setOnClickListener{
+        v.btn_change_password.setOnClickListener{
             changePassword()
         }
-        btn_cancel.setOnClickListener{
+        v.btn_cancel.setOnClickListener{
             dismiss()
         }
     }
@@ -94,7 +99,7 @@ open class ChangePasswordDialog : DialogFragment(){
             user.setPassword(oldPassword)
             user.setNewPassword(newPassword)
             changePasswordProgress(user)
-            progress.setVisibility(View.VISIBLE)
+            progress.visibility = View.VISIBLE
 
         }
     }

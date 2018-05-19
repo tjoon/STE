@@ -26,7 +26,12 @@
                     android:host="learn2crack" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProfileActivity"></activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/AppTheme.Profile"
+            >
+
+        </activity>
     </application>
 
 </manifest>

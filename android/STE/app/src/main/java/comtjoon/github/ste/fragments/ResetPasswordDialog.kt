@@ -24,7 +24,14 @@ import rx.subscriptions.CompositeSubscription
 import java.io.IOException
 
 
+
+
 open class ResetPasswordDialog : DialogFragment() {
+
+    interface Listener {
+
+        fun onPasswordReset(message: String)
+    }
 
     private var mSubscriptions: CompositeSubscription? = null
     private var mEmail: String? = null
@@ -32,10 +39,6 @@ open class ResetPasswordDialog : DialogFragment() {
 
     private var mListner: Listener? = null
 
-    interface Listener {
-
-        fun onPasswordReset(message: String)
-    }
 
     companion object {
         val TAG = ResetPasswordDialog::class.java.simpleName
@@ -44,10 +47,18 @@ open class ResetPasswordDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater!!.inflate(R.layout.dialog_reset_password, container, false)
         mSubscriptions = CompositeSubscription()
-        initViews(view);
+        initViews(view)
         return view
     }
 
+    private fun initViews(v: View) {
+        v.btn_reset_password.setOnClickListener {
+            if (isInit)
+                resetPasswordInit()
+            else
+                resetPasswordFinish()
+        }
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -67,32 +78,25 @@ open class ResetPasswordDialog : DialogFragment() {
         et_token.setText(token)
     }
 
-    private fun initViews(v: View) {
-        v.btn_reset_password.setOnClickListener {
-            if (isInit)
-                resetPasswordInit()
-            else
-                resetPasswordFinish()
-        }
-    }
+
 
     private fun resetPasswordInit() {
 
         setEmptyFields()
 
-        mEmail = et_email.getText().toString()
+        mEmail = et_email.text.toString()
 
         var err = 0
 
         if (!validateEmail(mEmail!!)) {
 
             err++
-            ti_email.setError("Email Should be Valid !")
+            ti_email.error = "Email Should be Valid !"
         }
 
         if (err == 0) {
 
-            progress.setVisibility(View.VISIBLE)
+            progress.visibility = View.VISIBLE
             resetPasswordInitProgress(mEmail!!)
         }
     }
@@ -101,26 +105,26 @@ open class ResetPasswordDialog : DialogFragment() {
 
         setEmptyFields()
 
-        val token = et_token.getText().toString()
-        val password = et_password.getText().toString()
+        val token = et_token.text.toString()
+        val password = et_password.text.toString()
 
         var err = 0
 
         if (!validateFields(token)) {
 
             err++
-            ti_token.setError("Token Should not be empty !")
+            ti_token.error = "Token Should not be empty !"
         }
 
         if (!validateFields(password)) {
 
             err++
-            ti_email.setError("Password Should not be empty !")
+            ti_email.error = "Password Should not be empty !"
         }
 
         if (err == 0) {
 
-            progress.setVisibility(View.VISIBLE)
+            progress.visibility = View.VISIBLE
 
             val user = User()
             user.setPassword(password)
@@ -135,7 +139,7 @@ open class ResetPasswordDialog : DialogFragment() {
         mSubscriptions!!.add(NetworkUtil.getRetrofit().resetPasswordInit(email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponse, this::handleError))
     }
 
     private fun resetPasswordFinishProgress(user: User) {
@@ -143,20 +147,20 @@ open class ResetPasswordDialog : DialogFragment() {
         mSubscriptions!!.add(NetworkUtil.getRetrofit().resetPasswordFinish(mEmail!!, user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponse, this::handleError))
     }
 
     private fun handleResponse(response: Response) {
 
-        progress.setVisibility(View.GONE)
+        progress.visibility = View.GONE
 
         if (isInit) {
 
             isInit = false
             showMessage(response.getMessage()!!)
-            ti_email.setVisibility(View.GONE)
-            ti_token.setVisibility(View.VISIBLE)
-            ti_password.setVisibility(View.VISIBLE)
+            ti_email.visibility = View.GONE
+            ti_token.visibility = View.VISIBLE
+            ti_password.visibility = View.VISIBLE
 
         } else {
 
@@ -167,7 +171,7 @@ open class ResetPasswordDialog : DialogFragment() {
 
     private fun handleError(error: Throwable) {
 
-        progress.setVisibility(View.GONE)
+        progress.visibility = View.GONE
 
         if (error is HttpException) {
 
@@ -191,9 +195,14 @@ open class ResetPasswordDialog : DialogFragment() {
 
     private fun showMessage(message: String) {
 
-        tv_message.setVisibility(View.VISIBLE)
-        tv_message.setText(message)
+        tv_message.visibility = View.VISIBLE
+        tv_message.text = message
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mSubscriptions!!.unsubscribe()
     }
 
 }
