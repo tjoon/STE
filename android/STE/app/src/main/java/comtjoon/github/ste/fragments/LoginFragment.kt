@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import com.google.gson.GsonBuilder
 import comtjoon.github.ste.ProfileActivity
 import comtjoon.github.ste.R
@@ -33,8 +32,6 @@ class LoginFragment : Fragment() {
     companion object {
         val TAG = LoginFragment::class.java.simpleName
     }
-
-    private var mBtLogin: Button? = null
 
     private var mSubscriptions: CompositeSubscription? = null
     private var mSharedPreferences: SharedPreferences? = null
@@ -72,7 +69,7 @@ class LoginFragment : Fragment() {
         var email: String = et_email.text.toString()
         var password: String = et_password.text.toString()
 
-        var err: Int = 0
+        var err = 0
 
         if (!Validation.validateEmail(email)) {
             err++
