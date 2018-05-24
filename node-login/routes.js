@@ -77,6 +77,23 @@ module.exports = router => {
 		}
 	});
 
+	// 회원탈퇴
+	router.delete('/users/:id', (req,res) => {
+
+		if (checkToken(req)) {
+
+			withdraw.withdrawUser(req.params.id)
+
+			.then(result => res.json(result))
+
+			.catch(err => res.status(err.status).json({ message: err.message }));
+
+		} else {
+
+			res.status(401).json({ message: 'Invalid Token !' });
+		}
+	});
+
 	router.put('/users/:id', (req,res) => {
 
 		if (checkToken(req)) {
