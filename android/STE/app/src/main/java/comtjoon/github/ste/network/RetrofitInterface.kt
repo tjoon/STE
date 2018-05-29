@@ -26,4 +26,11 @@ interface RetrofitInterface {
 
     @POST("users/{email}/password")
     fun resetPasswordFinish(@Path("email") email: String, @Body user: User): Observable<Response>
+
+    @HTTP(method = "DELETE", path = "users/{email}", hasBody = true)
+    fun withdraw(@Path("email") email: String, @Body user : User) : Observable<Response>
+
+
+    //@DELETE("users/{email}")
+    //fun withdraw(@Path("email") email: String, @Body user : User) : Observable<Response>
 }

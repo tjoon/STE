@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.google.gson.GsonBuilder
 import comtjoon.github.ste.fragments.ChangePasswordDialog
+import comtjoon.github.ste.fragments.WithdrawDialog
 import comtjoon.github.ste.model.Response
 import comtjoon.github.ste.model.User
 import comtjoon.github.ste.network.NetworkUtil
@@ -20,8 +21,7 @@ import rx.subscriptions.CompositeSubscription
 import java.io.IOException
 
 
-class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
-
+class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener, WithdrawDialog.Listener {
 
     companion object {
         val TAG = ProfileActivity::class.java.simpleName
@@ -47,6 +47,9 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
         }
         btn_logout.setOnClickListener {
             logout()
+        }
+        btn_withdraw.setOnClickListener {
+            showDialog_withdraw()
         }
     }
 
@@ -76,6 +79,18 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
         fragment.arguments = bundle
 
         fragment.show(supportFragmentManager, ChangePasswordDialog.TAG)
+    }
+
+    private fun showDialog_withdraw(){
+        var fragment = WithdrawDialog()
+
+        var bundle = Bundle()
+        bundle.putString(Constants.EMAIL, mEmail)
+        bundle.putString(Constants.TOKEN, mToken)
+        fragment.arguments = bundle
+
+        fragment.show(supportFragmentManager, WithdrawDialog.TAG)
+
     }
 
     private fun loadProfile() {
@@ -118,12 +133,6 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
         }
     }
 
-    private fun showSnackBarMessage(message: String) {
-
-        Snackbar.make(findViewById(R.id.activity_profile), message, Snackbar.LENGTH_SHORT).show()
-
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         mSubscriptions!!.unsubscribe()
@@ -131,6 +140,17 @@ class ProfileActivity : AppCompatActivity(), ChangePasswordDialog.Listener {
 
     override fun onPasswordChanged() {
         showSnackBarMessage("Password Changed Successfully !");
+    }
+
+    override fun onWithdrawFinish(message: String) {
+        showSnackBarMessage(message)
+        Thread.sleep(2000)
+    }
+
+    private fun showSnackBarMessage(message: String) {
+
+        Snackbar.make(findViewById(R.id.activity_profile), message, Snackbar.LENGTH_SHORT).show()
+
     }
 
 

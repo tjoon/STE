@@ -8,6 +8,7 @@ class User {
     private var password: String? = null
     private var created_at: String? = null
     private var newPassword: String? = null
+    private var confirmPassword: String? = null
     private var token: String? = null
 
     fun setName(name: String) {
@@ -32,6 +33,10 @@ class User {
 
     fun getCreated_at(): String? {
         return created_at
+    }
+
+    fun setConfirmPassword(confirmPassword: String){
+        this.confirmPassword = confirmPassword
     }
 
     fun setNewPassword(newPassword: String) {
