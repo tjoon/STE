@@ -2,28 +2,47 @@
 
 const user = require('../models/user');
 
-exports.withdrawUser = email => 
+exports.withdrawUser = (email, currentPassword, confirmPassword) => 
 	
 	new Promise((resolve,reject) => {
+		user.find({ email: email })
 
-		user.find({ email: email }, { name: 1, email: 1, created_at: 1, _id: 0 })
+		.then(users => {
+			var _id = users[0]._id
 
-		.then(user => {
-
-			if (bcrypt.compareSync(token, user.temp_password)) {
-
-				user.remove({ email: email})
-
+			if(currentPassword == confirmPassword){
+				user.remove({ _id: _id}, function(err, output){
+					if(err){
+						console.log("@#$#@$#$@#$ remove fail !")
+						reject(Error("@#$#@$#@ remove fail"))
+	
+					} else {
+	
+						console.log("@#$#@$#$@#$ resolve !")
+						resolve({ status: 200, message: 'Withdraw Successfully !' })
+	
+					}
+				})
 			} else {
-
-				reject({ status: 401, message: 'Invalid Token !' });
+				reject({ status: 401, message: 'Invalid Password Confirm !' });
 			}
+			/*
+			user.remove({ _id: _id}, function(err, output){
+
+				if(err){
+					console.log("@#$#@$#$@#$ remove fail !")
+					reject(Error("@#$#@$#@ remove fail"))
+
+				} else {
+
+					console.log("@#$#@$#$@#$ resolve !")
+					resolve({ status: 200, message: 'Withdraw Successfully !' })
+
+				}
+			})
+			*/
 		})
+		
 
-		.then(user => resolve({ status: 200, message: 'Withdraw Sucessfully !' }))
-
-		.catch(err => reject({ status: 500, message: 'Internal Server Error !' }))
-
-	});
-
-
+		.catch(err => reject({ status: 500, message: 'Internal Server Error !' }));
+	})

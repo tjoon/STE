@@ -7,6 +7,7 @@ const register = require('./functions/register');
 const login = require('./functions/login');
 const profile = require('./functions/profile');
 const password = require('./functions/password');
+const withdraw = require('./functions/withdraw');
 const config = require('./config/config.json');
 
 module.exports = router => {
@@ -82,9 +83,12 @@ module.exports = router => {
 
 		if (checkToken(req)) {
 
-			withdraw.withdrawUser(req.params.id)
+			const currentPassword = req.body.password
+			const confirmPassword = req.body.confirmPassword
 
-			.then(result => res.json(result))
+			withdraw.withdrawUser(req.params.id, currentPassword, confirmPassword)
+
+			.then(result => res.status(result.status).json({ message: result.message }))
 
 			.catch(err => res.status(err.status).json({ message: err.message }));
 
